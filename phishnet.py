@@ -13,14 +13,14 @@ import json
 
 # Prompt the user to enter their API keys
 VT_API_KEY = input("Enter your VirusTotal API key: ").strip()
-RAPIDAPI_KEY = input("Enter your Domainr API key: ").strip()
+RAPIDAPI_KEY = input("Enter your Domainr and Whois55 API key: ").strip()
 URLSCAN_API_KEY = input("Enter your URLscan.io API key: ").strip()
 
 # Prompt the user to enter the client name
 client_name = input("Enter the client name: ").strip()
 
-# Prompt the user to enter a comma-separated list of subdomain:TLD pairs
-domains_input = input("Enter a list of comma-separated subdomain.TLD pairs (e.g., jacksonco.com, jacksonblemming.ca): ")
+# Prompt the user to enter a comma-separated list of domain:TLD pairs
+domains_input = input("Enter a list of comma-separated domain.TLD pairs (e.g., jacksonco.com, jacksonblemming.ca): ")
 domains = [domain.strip() for domain in domains_input.split(',')]
 
 # Parse the input into a dictionary
@@ -39,6 +39,7 @@ VT_RATE_LIMIT = 2  # requests per minute
 VT_TIMEOUT = 30  # Timeout for API requests in seconds
 MAX_RETRIES = 2
 RAPIDAPI_HOST = 'domainr.p.rapidapi.com'
+WHOIS55_HOST = 'whois55.p.rapidapi.com'
 
 # Country abbreviation to full name mapping
 country_mapping = {
@@ -216,6 +217,41 @@ def get_screenshot_url(domain):
         return screenshot_url
     return None
 
+def get_last_dns_change(domain):
+    url = f"https://{WHOIS55_HOST}/api/v1/whois?domain={domain}"
+    headers = {
+        'x-rapidapi-key': RAPIDAPI_KEY,
+        'x-rapidapi-host': WHOIS55_HOST
+    }
+    retries = 3
+    timeout = 10  # seconds
+
+    for attempt in range(retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=timeout)
+            response.raise_for_status()
+            if response.status_code == 200:
+                whois_data = response.json()
+                updated_date_str = whois_data.get('parsed', {}).get('Updated Date', 'N/A')
+                if updated_date_str != 'N/A':
+                    updated_date = datetime.strptime(updated_date_str, '%Y-%m-%dT%H:%M:%SZ')
+                    return updated_date.strftime('%Y-%m-%d')
+                return 'N/A'
+        except Timeout:
+            print(f"Timeout occurred for {domain}. Retrying...")
+        except HTTPError as http_err:
+            print(f"HTTP error occurred for {domain}: {http_err}")
+            break
+        except RequestException as req_err:
+            print(f"Request exception occurred for {domain}: {req_err}")
+            break
+        except Exception as e:
+            print(f"Unexpected error occurred for {domain}: {e}")
+            break
+        time.sleep(2)  # Wait before retrying
+
+    return 'N/A'
+
 def process_domain_permutation(perm, base_subdomain, original_domain, original_tld):
     try:
         tld = perm['domain'].split('.')[-1]
@@ -267,6 +303,7 @@ def process_domain_permutation(perm, base_subdomain, original_domain, original_t
                     'Domain Availability Status': availability_status,
                     'Website Screenshot': screenshot_url,
                     'notes': notes,
+                    'Last DNS Change': get_last_dns_change(perm['domain']),  # Add last DNS change
                     'Original Domain': base_subdomain  # Temporary column to track the original domain
                 }
     except Exception as e:
