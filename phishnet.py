@@ -19,8 +19,8 @@ URLSCAN_API_KEY = input("Enter your URLscan.io API key: ").strip()
 # Prompt the user to enter the client name
 client_name = input("Enter the client name: ").strip()
 
-# Prompt the user to enter a comma-separated list of domain:TLD pairs
-domains_input = input("Enter a list of comma-separated domain.TLD pairs (e.g., jacksonco.com, jacksonblemming.ca): ")
+# Prompt the user to enter a comma-separated list of subdomain:TLD pairs
+domains_input = input("Enter a list of comma-separated subdomain.TLD pairs (e.g., jacksonco.com, jacksonblemming.ca): ")
 domains = [domain.strip() for domain in domains_input.split(',')]
 
 # Parse the input into a dictionary
@@ -346,8 +346,8 @@ def compare_with_previous(df, client_name, today_date):
     latest_previous_file = previous_files[-1] if previous_files else None
 
     if latest_previous_file is None:
-        print(f"No previous file found for client '{client_name}'. All entries will be marked as 'No' in the 'New' column.")
-        df['New'] = 'No'
+        print(f"No previous file found for client '{client_name}'.")
+        df['New'] = 'Yes'
     else:
         print(f"Comparing with the latest previous file: '{latest_previous_file}'")
         previous_df = pd.read_excel(latest_previous_file, sheet_name='Permutations')
