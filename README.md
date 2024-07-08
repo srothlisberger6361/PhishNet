@@ -3,12 +3,12 @@ Cybersquatting is when someone registers a domain name that is similar to a legi
 
 ![image](https://github.com/srothlisberger6361/PhishNet/assets/39919375/e358d10d-c681-4622-9fd9-d6431b478e1b)
 ## APIs/Endpoints Used
-* [dnstwister.report (for fetching domain permutations/typosquatted domains)]
-* [urlscan.io (for fetching a DOM screenshot of the website for reference)]
-* [domainr (for fetching registration status of the domain permutations)]
-* [virustotal (for fetching IP and domain reputation status')]
-* [ipinfo.io (for fetching the Country the website is hosted in)]
-* [whois55 (for fetching when the domain permutation was updated/created)]
+* dnstwister.report (for fetching domain permutations/typosquatted domains)
+* urlscan.io (for fetching a DOM screenshot of the website for reference)
+* domainr (for fetching registration status of the domain permutations)
+* virustotal (for fetching IP and domain reputation status')
+* ipinfo.io (for fetching the Country the website is hosted in)
+* whois55 (for fetching when the domain permutation was updated/created)
 ## Requirements
 '''pip install -r requirements.txt'''
 ## Running It
