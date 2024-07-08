@@ -10,7 +10,11 @@ Cybersquatting is when someone registers a domain name that is similar to a legi
 * ipinfo.io (for fetching the Country the website is hosted in)
 * whois55 (for fetching when the domain permutation was updated/created)
 ## Requirements
-'''pip install -r requirements.txt'''
+'''
+pip install -r requirements.txt
+'''
 ## Running It
 With the previous file in the same directory (if available):
-'''python3 meshnet.py'''
+'''
+python3 meshnet.py
+'''
