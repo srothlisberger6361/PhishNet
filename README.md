@@ -14,4 +14,5 @@ Cybersquatting is when someone registers a domain name that is similar to a legi
 
 ## Running It
 With the previous file in the same directory (if available):
+
 `python3 phishnet.py`
