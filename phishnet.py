@@ -304,7 +304,8 @@ def process_domain_permutation(perm, base_subdomain, original_domain, original_t
                     'Website Screenshot': screenshot_url,
                     'notes': notes,
                     'Last DNS Change': get_last_dns_change(perm['domain']),  # Add last DNS change
-                    'Original Domain': base_subdomain  # Temporary column to track the original domain
+                    'Original Domain': base_subdomain,  # Temporary column to track the original domain
+                    'New/Changed Permutation': 'No'  # Default value, will be updated later
                 }
     except Exception as e:
         print(f"Error processing permutation {perm['domain']}: {e}")
@@ -347,16 +348,22 @@ def compare_with_previous(df, client_name, today_date):
 
     if latest_previous_file is None:
         print(f"No previous file found for client '{client_name}'.")
-        df['New'] = 'Yes'
+        df['New/Changed Permutation'] = 'Yes'
     else:
         print(f"Comparing with the latest previous file: '{latest_previous_file}'")
         previous_df = pd.read_excel(latest_previous_file, sheet_name='Permutations')
         if 'Domain permutation' in previous_df.columns:
             previous_domains = set(previous_df['Domain permutation'])
-            df['New'] = df['Domain permutation'].apply(lambda x: 'No' if x in previous_domains else 'Yes')
+            previous_status_dict = previous_df.set_index('Domain permutation')['Domain Availability Status'].to_dict()
+            df['New/Changed Permutation'] = df.apply(
+                lambda row: 'Yes' if (row['Domain permutation'] not in previous_domains or
+                                      (row['Domain permutation'] in previous_status_dict and 
+                                       previous_status_dict[row['Domain permutation']] in ["The Domain is Parked.", "The domain is For Sale."] and 
+                                       row['Domain Availability Status'] == "The website is active- check link if website is parked, offline, or online."))
+                else 'No', axis=1)
         else:
             print(f"The latest previous file does not contain the 'Domain permutation' column.")
-            df['New'] = 'No'
+            df['New/Changed Permutation'] = 'No'
 
     return df
 
@@ -394,7 +401,7 @@ def main(subdomains, original_tlds=None):
     # Create a DataFrame
     df = pd.DataFrame(unique_data)
 
-    # Compare with the latest previous data and mark new entries
+    # Compare with the latest previous data and mark new or changed entries
     today_date = datetime.now().strftime("%Y%m%d")
     df = compare_with_previous(df, client_name, today_date)
 
@@ -429,14 +436,14 @@ def main(subdomains, original_tlds=None):
 
     # Apply coloring to the permutations
     for row in ws.iter_rows(min_row=2, max_row=ws.max_row, min_col=1, max_col=ws.max_column):
-        original_domain = row[-2].value  # Get the original domain from the temporary column
+        original_domain = row[-2].value  # Get the original domain from the third to last column
         fill_color = colors.get(original_domain.split('.')[0], "FFFFFF")  # Use the subdomain part for coloring
         fill = PatternFill(start_color=fill_color, end_color=fill_color, fill_type="solid")
         for cell in row:
             cell.fill = fill
 
-    # Remove the temporary column
-    ws.delete_cols(ws.max_column-1)
+    # Remove the "Original Domain" column
+    ws.delete_cols(ws.max_column - 1)
 
     # Save the workbook
     wb.save(excel_filename)
