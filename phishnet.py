@@ -190,6 +190,8 @@ def get_domain_availability_status(status):
         return "The domain is not available for registration"
     if "inactive" in status:
         return "The domain is registered, but the website is Offline."
+    if "parked" in status:
+        return "The domain is Parked."
     if "active" in status:
         return "The website is active- check link if website is parked, offline, or online."
     return descriptions.get(status, "Unknown status")
@@ -305,7 +307,7 @@ def process_domain_permutation(perm, base_subdomain, original_domain, original_t
                     'notes': notes,
                     'Last DNS Change': get_last_dns_change(perm['domain']),  # Add last DNS change
                     'Original Domain': base_subdomain,  # Temporary column to track the original domain
-                    'New/Changed Permutation': 'No'  # Default value, will be updated later
+                    'New/Changed': 'No'  # Default value, will be updated later
                 }
     except Exception as e:
         print(f"Error processing permutation {perm['domain']}: {e}")
@@ -348,14 +350,14 @@ def compare_with_previous(df, client_name, today_date):
 
     if latest_previous_file is None:
         print(f"No previous file found for client '{client_name}'.")
-        df['New/Changed Permutation'] = 'Yes'
+        df['New/Changed'] = 'Yes'
     else:
         print(f"Comparing with the latest previous file: '{latest_previous_file}'")
         previous_df = pd.read_excel(latest_previous_file, sheet_name='Permutations')
         if 'Domain permutation' in previous_df.columns:
             previous_domains = set(previous_df['Domain permutation'])
             previous_status_dict = previous_df.set_index('Domain permutation')['Domain Availability Status'].to_dict()
-            df['New/Changed Permutation'] = df.apply(
+            df['New/Changed'] = df.apply(
                 lambda row: 'Yes' if (row['Domain permutation'] not in previous_domains or
                                       (row['Domain permutation'] in previous_status_dict and 
                                        previous_status_dict[row['Domain permutation']] in ["The Domain is Parked.", "The domain is For Sale."] and 
@@ -363,7 +365,7 @@ def compare_with_previous(df, client_name, today_date):
                 else 'No', axis=1)
         else:
             print(f"The latest previous file does not contain the 'Domain permutation' column.")
-            df['New/Changed Permutation'] = 'No'
+            df['New/Changed'] = 'No'
 
     return df
 
