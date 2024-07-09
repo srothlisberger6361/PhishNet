@@ -24,11 +24,9 @@ With the previous file in the same directory (if available):
 
 ## Output
 <div align="center">
-  <img src="![image](https://github.com/srothlisberger6361/PhishNet/assets/39919375/d1db8140-d0d7-4465-93d6-99ef2598ac08)
-" />
+  <img src="https://github.com/srothlisberger6361/PhishNet/assets/39919375/249ebd00-88be-4dd1-a925-af018cdfa2dc" alt="image" />
 </div>
 <div align="center">
-  <img src="![image](https://github.com/srothlisberger6361/PhishNet/assets/39919375/3a7d8ee3-f20b-45f6-b8ac-58691c1deb4b)
-)
-" />
+  <img src="https://github.com/srothlisberger6361/PhishNet/assets/39919375/75bc94f0-3e71-469d-bd21-14c621a923c2" alt="image" />
 </div>
+
