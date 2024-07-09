@@ -1,4 +1,4 @@
-**PhishNet: Cybersquatting Hunting**
+## PhishNet: Cybersquatting Hunting
 
 Cybersquatting is when someone registers a domain name that is similar to a legitimate domain name, by capitalizing on common typographical errors made by web users when searching a domain in a browser (like facebool.com) or by textually looking very similar to the original domain (like 'l' for 'i' in internatlonal.org), especially if email phishing is the goal. This project helps detect, analyze, and keep track of emerging domain permutations that may be targeting your organization. 
 
