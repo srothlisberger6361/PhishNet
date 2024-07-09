@@ -17,7 +17,18 @@ Cybersquatting is when someone registers a domain name that is similar to a legi
 ## Requirements
 `pip install -r requirements.txt`
 
-## Running It
+## Run It
 With the previous file in the same directory (if available):
 
 `python3 phishnet.py`
+
+## Output
+<div align="center">
+  <img src="![image](https://github.com/srothlisberger6361/PhishNet/assets/39919375/d1db8140-d0d7-4465-93d6-99ef2598ac08)
+" />
+</div>
+<div align="center">
+  <img src="![image](https://github.com/srothlisberger6361/PhishNet/assets/39919375/3a7d8ee3-f20b-45f6-b8ac-58691c1deb4b)
+)
+" />
+</div>
