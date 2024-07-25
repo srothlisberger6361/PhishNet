@@ -9,10 +9,10 @@ Cybersquatting is when someone registers a domain name that is similar to a legi
 ## APIs/Endpoints Used
 * dnstwister.report (for fetching domain permutations/typosquatted domains)
 * urlscan.io (for fetching a DOM screenshot of the website for reference) **Need Free API Key**
-* domainr (for fetching registration status of the domain permutations) **Need Free API Key**
+* domainr (for fetching registration status of the domain permutations) **Need Free API Key through rapidAPI.com**
 * virustotal (for fetching IP and domain reputation status') **Need Free API Key**
 * ipinfo.io (for fetching the Country the website is hosted in)
-* whois55 (for fetching when the domain permutation was updated/created) **Need Free API Key**
+* whois55 (for fetching when the domain permutation was updated/created) **Need Free API Key through rapidAPI.com**
 
 ## Requirements
 `pip install -r requirements.txt`
